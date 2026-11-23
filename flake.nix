@@ -28,7 +28,7 @@
         text = ''
           identity="''${MURMUR_SIGN_IDENTITY:-Murmur Code Signing}"
           out="''${1:-dist}"
-          dmg="$out/Murmur-${murmur.version}.dmg"
+          dmg="$out/Murmur.dmg" # stable name: releases/latest/download/Murmur.dmg
           stage=$(mktemp -d)
           trap 'rm -rf "$stage"' EXIT
 

@@ -4,6 +4,8 @@
   swift,
   apple-sdk_15,
   darwinMinVersionHook,
+  librsvg,
+  libicns,
   whisper,
 }:
 
@@ -22,7 +24,11 @@ stdenv.mkDerivation {
     ];
   };
 
-  nativeBuildInputs = [ swift ];
+  nativeBuildInputs = [
+    swift
+    librsvg
+    libicns
+  ];
   buildInputs = [
     apple-sdk_15
     (darwinMinVersionHook "14.0")
@@ -35,6 +41,13 @@ stdenv.mkDerivation {
       -F ${frameworks} -framework whisper \
       -Xlinker -rpath -Xlinker @executable_path/../Frameworks \
       Sources/*.swift -o Murmur
+
+    # App icon: render the SVG at every size macOS uses and pack it into an .icns.
+    mkdir icon
+    for size in 16 32 48 128 256 512 1024; do
+      rsvg-convert -w $size -h $size Resources/icon.svg -o icon/$size.png
+    done
+    png2icns Murmur.icns icon/*.png
     runHook postBuild
   '';
 
@@ -44,6 +57,7 @@ stdenv.mkDerivation {
     mkdir -p $app/MacOS $app/Resources $app/Frameworks
     cp Murmur $app/MacOS/
     cp Resources/Info.plist $app/
+    cp Murmur.icns $app/Resources/
     cp -R ${frameworks}/whisper.framework $app/Frameworks/
     chmod -R u+w $app/Frameworks
     runHook postInstall
