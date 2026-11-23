@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installing Murmur</title>
+<style>
+  :root { --fg: #1d1d1f; --muted: #6e6e73; --bg: #fff; --card: #f5f5f7; --accent: #0071e3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fg: #f5f5f7; --muted: #a1a1a6; --bg: #1d1d1f; --card: #2c2c2e; --accent: #2997ff; }
+  }
+  body { font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+         color: var(--fg); background: var(--bg); max-width: 680px; margin: 40px auto; padding: 0 20px; }
+  h1 { font-size: 30px; margin-bottom: 4px; }
+  h2 { font-size: 20px; margin-top: 36px; }
+  .lead { color: var(--muted); margin-top: 0; }
+  ol li { margin: 8px 0; }
+  .card { background: var(--card); border-radius: 12px; padding: 14px 18px; margin: 16px 0; }
+  kbd { font: 13px ui-monospace, Menlo, monospace; background: var(--card); border: 1px solid #8884;
+        border-radius: 5px; padding: 1px 6px; }
+  table { border-collapse: collapse; width: 100%; }
+  td { padding: 6px 8px; border-bottom: 1px solid #8883; vertical-align: top; }
+  td:first-child { white-space: nowrap; width: 1%; }
+</style>
+</head>
+<body>
+
+<h1>Murmur</h1>
+<p class="lead">Talk instead of typing. Murmur turns your speech into text in any app, entirely on your Mac.
+Nothing you say is sent anywhere.</p>
+
+<div class="card">Needs a Mac with Apple Silicon (M1 or newer) and macOS 14 Sonoma or newer.</div>
+
+<h2>1. Install</h2>
+<ol>
+  <li>Drag <b>Murmur</b> onto the <b>Applications</b> folder in this window.</li>
+  <li>Open your <b>Applications</b> folder and double-click <b>Murmur</b>.</li>
+  <li>macOS will say it <i>“could not verify”</i> Murmur. That's expected: Murmur is a small private app,
+      not from the App Store. Click <b>Done</b>.</li>
+  <li>Open <b>System Settings → Privacy &amp; Security</b>, scroll down to the message about Murmur and click
+      <b>Open Anyway</b>. Confirm with your password or Touch ID, then click <b>Open</b>.</li>
+</ol>
+<p>You only need to do this once.</p>
+
+<h2>2. First start</h2>
+<ol>
+  <li>A <b>waveform icon</b> appears in the menu bar at the top right. That's Murmur. It has no window.</li>
+  <li>Murmur downloads its speech model (about 190 MB). The icon shows the progress. Wait for
+      <b>“Murmur is ready”</b>.</li>
+  <li>macOS asks to allow Murmur to control your computer (<b>Accessibility</b>). Click <b>Open System Settings</b>
+      and switch <b>Murmur</b> on. This lets Murmur paste the text for you.
+      If you skip it, Murmur copies the text and you press <kbd>⌘</kbd> <kbd>V</kbd> yourself.</li>
+  <li>The first time you dictate, macOS asks for the <b>Microphone</b>. Click <b>Allow</b>.</li>
+</ol>
+
+<h2>3. Dictate</h2>
+<ol>
+  <li>Click where you want the text, e.g. an email or a chat message.</li>
+  <li>Press <kbd>⌥ Option</kbd> + <kbd>Space</kbd> and start talking. A small panel at the top right shows
+      what Murmur hears, live.</li>
+  <li>When you're done:</li>
+</ol>
+<table>
+  <tr><td><kbd>⏎ Return</kbd></td><td>Paste the text where your cursor is.</td></tr>
+  <tr><td><kbd>⇧ Shift</kbd> + <kbd>⏎</kbd></td><td>Paste using the <b>accurate</b> model: a little slower, better with names
+      and punctuation. Download it once from the menu bar icon (about 550 MB).</td></tr>
+  <tr><td><kbd>⎋ Esc</kbd></td><td>Cancel. Nothing is pasted.</td></tr>
+  <tr><td>Buttons</td><td>The panel also has <b>Paste</b>, <b>Copy</b> (just copy it, don't paste) and <b>Cancel</b>.</td></tr>
+</table>
+<p>Murmur understands many languages and detects the language by itself.</p>
+
+<h2>Tips</h2>
+<ul>
+  <li>If <kbd>⌥ Option</kbd> + <kbd>Space</kbd> is used by something else, pick another shortcut from the menu bar
+      icon → <b>Shortcut</b>.</li>
+  <li>To start Murmur automatically: <b>System Settings → General → Login Items</b> → <b>+</b> → choose Murmur.</li>
+  <li>To remove Murmur: quit it from the menu bar icon, delete it from Applications, and delete the folder
+      <code>~/Library/Application Support/Murmur</code> (the speech models).</li>
+</ul>
+
+<h2>Privacy</h2>
+<p>Your voice is turned into text on your Mac. Murmur only connects to the internet to download its speech
+models (from Hugging Face). It doesn't read what you type: it only reacts to its own shortcut, and only
+while you're dictating to <kbd>⏎</kbd>, <kbd>⇧⏎</kbd> and <kbd>Esc</kbd>.</p>
+
+</body>
+</html>
