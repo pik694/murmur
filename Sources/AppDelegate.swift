@@ -31,6 +31,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // MARK: - Launch
 
     func applicationDidFinishLaunching(_: Notification) {
+        // One Murmur at a time: a second copy couldn't register the shortcut anyway
+        // (e.g. a login item plus a copy opened from Applications).
+        let me = NSRunningApplication.current
+        if let id = Bundle.main.bundleIdentifier,
+           NSRunningApplication.runningApplications(withBundleIdentifier: id).contains(where: { $0 != me && !$0.isTerminated }) {
+            _exit(0) // see applicationWillTerminate
+        }
+
         WhisperModel.silenceLogs()
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         let menu = NSMenu()
@@ -49,6 +57,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             UserDefaults.standard.set(true, forKey: "askedAccessibility")
             Paster.requestAccess()
         }
+    }
+
+    func applicationWillTerminate(_: Notification) {
+        // whisper.cpp 1.8.4's Metal backend aborts in its static destructors at exit
+        // (ggml_metal_rsets_free), which made every Quit a crash, and under a
+        // KeepAlive launch agent an endless restart. The process is ending anyway, so
+        // skip C++ teardown and exit cleanly.
+        _exit(0)
     }
 
     private func registerShortcut() {
