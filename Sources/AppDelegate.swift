@@ -77,13 +77,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     /// Loads the accurate model if installed; blocks the calling (worker) thread.
+    /// Never call from a block already running on `loader` (that would deadlock); use
+    /// `loadAccurateOnLoader` there instead.
     private func accurateModel() -> WhisperModel? {
-        loader.sync {
-            if accurate == nil, ModelSpec.accurate.isInstalled {
-                accurate = WhisperModel(path: ModelSpec.accurate.path.path)
-            }
-            return accurate
+        loader.sync { loadAccurateOnLoader() }
+    }
+
+    /// Must run on `loader`.
+    private func loadAccurateOnLoader() -> WhisperModel? {
+        dispatchPrecondition(condition: .onQueue(loader))
+        if accurate == nil, ModelSpec.accurate.isInstalled {
+            accurate = WhisperModel(path: ModelSpec.accurate.path.path)
         }
+        return accurate
     }
 
     private func download(_ spec: ModelSpec) {
@@ -160,7 +166,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         NSSound(named: "Bottle")?.play()
         refreshIcon()
         runPreview(session: session)
-        if ModelSpec.accurate.isInstalled { loader.async { _ = self.accurateModel() } } // warm up for ⇧⏎
+        if ModelSpec.accurate.isInstalled { loader.async { _ = self.loadAccurateOnLoader() } } // warm up for ⇧⏎
     }
 
     /// Re-transcribes everything recorded so far with the fast model whenever >= 0.25 s of
